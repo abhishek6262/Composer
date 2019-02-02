@@ -1,6 +1,17 @@
 # Composer
 The instance of Project-Level Composer.
 
+## Examples
+```
+require_once 'Path\To\Composer.php';
+
+$composer = new \Composer('pathToProjectRoot', 'pathToBinDirectory');
+
+if (! $composer->exists()) {
+  $composer->install();
+}
+```
+
 ## Credits
 
 - [Abhishek Prakash](https://github.com/abhishek6262)
