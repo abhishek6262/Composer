@@ -1,6 +1,8 @@
 # Composer
 The instance of Project-Level Composer.
 
+This composer package allows you to install composer on your project level so you don't have to install composer on your system. Moreover you can consume the power of composer outside of the terminal as you do use any other PHP class.
+
 ## Examples
 ```
 require_once 'Path\To\Composer.php';
