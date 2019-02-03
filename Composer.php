@@ -18,15 +18,15 @@ class Composer
     /**
      * Composer constructor.
      *
-     * @param  string $projectRootPath (Absolute Path [__DIR__])
-     * @param  string $binPath (Absolute Path [__DIR__])
+     * @param  string $projectRootPath (Absolute Path [__DIR__]) The root directory of the project where composer.json file is stored.
+     * @param  string $binDirPath (Absolute Path [__DIR__]) The directory where the composer should be installed.
      */
-    public function __construct(string $projectRootPath, string $binPath = '')
+    public function __construct(string $projectRootPath, string $binDirPath = '')
     {
         $this->rootPath = rtrim($projectRootPath, '/');
-        $this->binPath  = rtrim($binPath, '/');
+        $this->binPath  = rtrim($binDirPath, '/');
 
-        if (empty($binPath)) {
+        if (empty($this->binPath)) {
             $this->binPath = $this->rootPath . '/bin';
 
             if (! file_exists($this->binPath)) {
