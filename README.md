@@ -9,7 +9,8 @@ This library allows you to install composer on your project making it possible f
 ```
 require_once 'Path\To\Composer.php';
 
-$composer = new \Composer('pathToProjectRoot', 'pathToBinDirectory');
+// $composer = new \Composer('pathToProjectRoot', 'pathToBinDirectory');
+$composer = new \Composer(__DIR__);
 
 if (! $composer->exists()) {
     $composer->install();

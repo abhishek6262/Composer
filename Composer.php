@@ -8,23 +8,31 @@ class Composer
     /**
      * @var string
      */
-    protected $binPath = '/bin';
+    protected $binPath;
 
     /**
      * @var string
      */
-    protected $rootPath = '/';
+    protected $rootPath;
 
     /**
      * Composer constructor.
      *
-     * @param  string $projectRootPath
-     * @param  string $binPath
+     * @param  string $projectRootPath (Absolute Path [__DIR__])
+     * @param  string $binPath (Absolute Path [__DIR__])
      */
-    public function __construct(string $projectRootPath, string $binPath)
+    public function __construct(string $projectRootPath, string $binPath = '')
     {
-        $this->rootPath = $projectRootPath;
-        $this->binPath  = $binPath;
+        $this->rootPath = rtrim($projectRootPath, '/');
+        $this->binPath  = rtrim($binPath, '/');
+
+        if (empty($binPath)) {
+            $this->binPath = $this->rootPath . '/bin';
+
+            if (! file_exists($this->binPath)) {
+                mkdir($this->binPath);
+            }
+        }
     }
 
     /**
