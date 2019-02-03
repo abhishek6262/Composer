@@ -36,6 +36,29 @@ class Composer
     }
 
     /**
+     * Executes the raw composer command.
+     *
+     * @param string $command
+     *
+     * @return void
+     */
+    public function rawCommand(string $command): void
+    {
+        $CURRENT_WORKING_DIRECTORY = getcwd();
+
+        chdir($this->rootPath);
+
+        $MAX_EXECUTION_TIME = 1800; // "30 Mins" for slow internet connections.
+
+        set_time_limit($MAX_EXECUTION_TIME);
+
+        $escaped_command = escapeshellcmd("php " . $this->binPath . "/composer " . $command);
+        shell_exec($escaped_command);
+
+        chdir($CURRENT_WORKING_DIRECTORY);
+    }
+
+    /**
      * Determines whether composer is installed in the project.
      *
      * @return bool
@@ -74,17 +97,7 @@ class Composer
      */
     public function installPackages(): void
     {
-        $CURRENT_WORKING_DIRECTORY = getcwd();
-
-        chdir($this->rootPath);
-
-        $MAX_EXECUTION_TIME = 1800; // "30 Mins" for slow internet connections.
-
-        set_time_limit($MAX_EXECUTION_TIME);
-
-        shell_exec("php " . $this->binPath . "/composer install");
-
-        chdir($CURRENT_WORKING_DIRECTORY);
+        $this->rawCommand("install");
     }
 
     /**
