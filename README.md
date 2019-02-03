@@ -1,7 +1,9 @@
 # Composer
 The instance of Project-Level Composer.
 
-This composer package allows you to install composer on your project level so you don't have to install composer on your system. Moreover you can consume the power of composer outside of the terminal as you do use any other PHP class.
+This library allows you to install composer on your project making it possible for you to use composer even when it is not installed in the system. Moreover, You can consume the power of composer and its commands outside of the terminal as you normally do use any other PHP class.
+
+[Read Blog Post.](https://www.shade.codes/introducing-project-level-composer/)
 
 ## Examples
 ```
@@ -10,7 +12,11 @@ require_once 'Path\To\Composer.php';
 $composer = new \Composer('pathToProjectRoot', 'pathToBinDirectory');
 
 if (! $composer->exists()) {
-  $composer->install();
+    $composer->install();
+}
+
+if ($composer->packagesExists() && ! $composer->packagesInstalled()) {
+    $composer->installPackages();
 }
 ```
 
