@@ -9,15 +9,23 @@ This library allows you to install composer on your project making it possible f
 ```
 require_once 'Path\To\Composer.php';
 
-// $composer = new \Composer('pathToProjectRoot', 'pathToBinDirectory');
-$composer = new \Composer(__DIR__);
+// $composer = new \abhishek6262\Composer\Composer('pathToProjectRoot', 'pathToBinDirectory');
+$composer = new \abhishek6262\Composer\Composer(__DIR__);
 
 if (! $composer->exists()) {
     $composer->install();
 }
 
 if ($composer->packagesExists() && ! $composer->packagesInstalled()) {
-    $composer->installPackages();
+    $response = $composer->installPackages();
+
+    if ($response->statusCode() == '0') {
+        echo "Packages successfully installed.";
+    } else {
+        echo "Packages failed to install.";
+    }
+
+    print_r($response->output());
 }
 ```
 

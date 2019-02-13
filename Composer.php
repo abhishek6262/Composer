@@ -1,61 +1,57 @@
 <?php
 
+namespace abhishek6262\Composer;
+
+require_once __DIR__ . "/System/Environment.php";
+require_once __DIR__ . "/System/Response.php";
+
+use abhishek6262\Composer\System\Environment;
+use abhishek6262\Composer\System\Response;
+
 /**
  * Class Composer
+ * @package abhishek6262\Composer
  */
 class Composer
 {
     /**
-     * @var string
+     * @var Environment
      */
-    protected $binPath;
-
-    /**
-     * @var string
-     */
-    protected $rootPath;
+    protected $environment;
 
     /**
      * Composer constructor.
      *
-     * @param  string $projectRootPath (Absolute Path [__DIR__]) The root directory of the project where composer.json file is stored.
-     * @param  string $binDirPath (Absolute Path [__DIR__]) The directory where the composer should be installed.
+     * @param  string $rootPath (Absolute Path [__DIR__]) The root directory of the project where composer.json file is stored.
+     * @param  string $binPath (Absolute Path [__DIR__]) The directory where the composer should be installed.
      */
-    public function __construct(string $projectRootPath, string $binDirPath = '')
+    public function __construct(string $rootPath, string $binPath = '')
     {
-        $this->rootPath = rtrim($projectRootPath, '/');
-        $this->binPath  = rtrim($binDirPath, '/');
-
-        if (empty($this->binPath)) {
-            $this->binPath = $this->rootPath . '/bin';
-        }
-
-        if (! file_exists($this->binPath)) {
-            mkdir($this->binPath, 0777, true);
-        }
+        $this->environment = new Environment($rootPath, $binPath);
     }
 
     /**
      * Executes the raw composer command.
      *
-     * @param string $command
+     * @param  string $command
      *
-     * @return void
+     * @return Response
      */
-    public function rawCommand(string $command): void
+    public function rawCommand(string $command): Response
     {
         $CURRENT_WORKING_DIRECTORY = getcwd();
 
-        chdir($this->rootPath);
+        chdir($this->environment->rootPath);
 
         $MAX_EXECUTION_TIME = 1800; // "30 Mins" for slow internet connections.
 
         set_time_limit($MAX_EXECUTION_TIME);
 
-        $escaped_command = escapeshellcmd("php " . $this->binPath . "/composer " . $command);
-        shell_exec($escaped_command);
+        exec( escapeshellcmd("php " . $this->environment->binPath . "/composer " . $command), $message, $code );
 
         chdir($CURRENT_WORKING_DIRECTORY);
+
+        return new Response($message, $code);
     }
 
     /**
@@ -65,7 +61,7 @@ class Composer
      */
     public function exists(): bool
     {
-        return file_exists($this->binPath . "/composer") ? true : false;
+        return file_exists($this->environment->binPath . "/composer") ? true : false;
     }
 
     /**
@@ -75,29 +71,17 @@ class Composer
      */
     public function install(): void
     {
-        $CURRENT_WORKING_DIRECTORY = getcwd();
-
-        chdir($this->rootPath);
-
-        $MAX_EXECUTION_TIME = 1800; // "30 Mins" for slow internet connections.
-
-        set_time_limit($MAX_EXECUTION_TIME);
-
-        shell_exec("php -r \"copy('https://getcomposer.org/installer', 'composer-setup.php');\"");
-        shell_exec("php composer-setup.php --install-dir=" . $this->binPath . " --filename=composer");
-        shell_exec("php -r \"unlink('composer-setup.php');\"");
-
-        chdir($CURRENT_WORKING_DIRECTORY);
+        $this->environment->install();
     }
 
     /**
      * Installs the packages present in the composer.json file.
      *
-     * @return void
+     * @return Response
      */
-    public function installPackages(): void
+    public function installPackages(): Response
     {
-        $this->rawCommand("install");
+        return $this->rawCommand("install");
     }
 
     /**
@@ -107,7 +91,7 @@ class Composer
      */
     public function packagesExists(): bool
     {
-        return file_exists($this->rootPath . "/composer.json") ? true : false;
+        return file_exists($this->enviroment->rootPath . "/composer.json") ? true : false;
     }
 
     /**
@@ -118,6 +102,6 @@ class Composer
      */
     public function packagesInstalled(): bool
     {
-        return file_exists($this->rootPath . "/vendor/") ? true : false;
+        return file_exists($this->enviroment->rootPath . "/vendor/") ? true : false;
     }
 }
