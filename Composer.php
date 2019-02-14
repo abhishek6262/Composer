@@ -91,7 +91,7 @@ class Composer
      */
     public function packagesExists(): bool
     {
-        return file_exists($this->enviroment->rootPath . "/composer.json") ? true : false;
+        return file_exists($this->environment->rootPath . "/composer.json") ? true : false;
     }
 
     /**
@@ -102,6 +102,6 @@ class Composer
      */
     public function packagesInstalled(): bool
     {
-        return file_exists($this->enviroment->rootPath . "/vendor/") ? true : false;
+        return file_exists($this->environment->rootPath . "/vendor/") ? true : false;
     }
 }
