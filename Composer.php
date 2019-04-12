@@ -69,7 +69,7 @@ class Composer
      *
      * @return void
      */
-    public function install(): void
+    public function install()
     {
         $this->environment->install();
     }

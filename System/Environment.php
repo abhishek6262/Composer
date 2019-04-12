@@ -20,7 +20,7 @@ class Environment
 
     /**
      * Environment constructor.
-     * 
+     *
      * @param  string $rootPath
      * @param  string $binPath
      */
@@ -43,7 +43,7 @@ class Environment
      *
      * @return void
      */
-    public function install(): void
+    public function install()
     {
         $MAX_EXECUTION_TIME = 1800; // "30 Mins" for slow internet connections.
 
