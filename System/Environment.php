@@ -27,7 +27,7 @@ class Environment
     public function __construct(string $rootPath, string $binPath = '')
     {
         $this->rootPath = rtrim($rootPath, '/');
-        $this->binPath = rtrim($binPath, '/');
+        $this->binPath  = rtrim($binPath, '/');
 
         if (empty($this->binPath)) {
             $this->binPath = $this->rootPath . '/bin';
